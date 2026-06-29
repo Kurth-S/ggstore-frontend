@@ -62,7 +62,12 @@ export default function Catalogo() {
       await api.post('/carrito/items', { juegoId, cantidad: 1 })
       alert('¡Agregado al carrito!')
     } catch (err) {
-      alert(err.response?.data?.error || 'Error al agregar al carrito')
+      const mensaje = err.response?.data?.error || ''
+      if (mensaje.includes('duplicate') || mensaje.includes('already exists')) {
+        alert('Este juego ya está en tu carrito')
+      } else {
+        alert(mensaje || 'Error al agregar al carrito')
+      }
     }
   }
 
@@ -75,7 +80,12 @@ export default function Catalogo() {
       await api.post(`/wishlist/${juegoId}`)
       alert('¡Agregado a tu lista de deseos!')
     } catch (err) {
-      alert(err.response?.data?.error || 'Error al agregar a wishlist')
+      const mensaje = err.response?.data?.error || ''
+      if (mensaje.includes('duplicate') || mensaje.includes('already exists')) {
+        alert('Este juego ya está en tu lista de deseos')
+      } else {
+        alert(mensaje || 'Error al agregar a wishlist')
+      }
     }
   }
 
@@ -156,11 +166,11 @@ export default function Catalogo() {
                   <div className="flex items-center gap-2 mb-4">
                     {juego.descuentoPorcentaje > 0 && (
                       <span className="text-gray-500 text-xs line-through">
-                       {juego.precio?.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
+                        {juego.precio?.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
                       </span>
                     )}
                     <span className="text-yellow-400 font-bold">
-                     {juego.precioFinal?.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
+                      {juego.precioFinal?.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
                     </span>
                   </div>
 
